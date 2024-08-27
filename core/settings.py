@@ -11,24 +11,32 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
-
+from dotenv import load_dotenv
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
+load_dotenv( BASE_DIR / '.env')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-txax9-qnxcra1()v#1+ub4v89(dea$&mt&h+=xx-t4b7qc-99o'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [
+    'localhost:8000',
+    'localhost:3000',
+    '127.0.0.1',
+    '08a6-158-181-248-104.ngrok-free.app',  
+    '*',
+    'http://172.25.160.1',
+    'http://192.168.31.147',
+]
 
 
-# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -39,8 +47,54 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'apps.assortment',
     'rest_framework',
+    'corsheaders',
     'drf_yasg',
+   
+    
 ]
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',
+    'http://127.0.0.1:8000',
+    'https://08a6-158-181-248-104.ngrok-free.app', 
+    'http://172.25.160.1',
+    'http://192.168.31.147', 
+]
+
+
+
+CORS_ORIGIN_WRITELIST = (
+    'http://localhost:3000',
+    'http://localhost:8000',
+    'http://172.25.160.1',
+    'http://192.168.31.147',
+)
+
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:3000',
+    'https://08a6-158-181-248-104.ngrok-free.app',  
+    'http://172.25.160.1',
+    'http://192.168.31.147',
+]
+
+
+
+CORS_ALLOW_HEADERS = (
+    'content-disposition', 'accept-encoding',
+    'content-type', 'accept', 'origin', 'Authorization', 'access-control-allow-methods',
+    'Access-Control-Allow-Origin',
+)
+
+CORS_ALLOW_METHODS = (
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+)
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -50,6 +104,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -119,6 +175,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'static'
+
+MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
